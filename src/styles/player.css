@@ -1,0 +1,421 @@
+
+.player {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  position: relative;
+  height: 90px;
+}
+
+/* === LEFT SECTION: Track Info + Buttons === */
+.player__left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
+.player__track-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  flex: 1;
+}
+
+.player__track-info strong {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Like Button */
+.player__like-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: transparent;
+  font-size: 20px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.player__like-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Playlist Button */
+.player__playlist-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--bg-hover);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.player__playlist-btn:hover {
+  background-color: var(--bg-active);
+  transform: scale(1.05);
+}
+
+/* === CENTER SECTION: Audio Controls (ALWAYS CENTERED) === */
+.player__center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.player audio {
+  width: 100%;
+  height: 40px;
+}
+
+/* === RIGHT SECTION: Toggle Button === */
+.player__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+  min-width: 50px;
+  justify-content: flex-end;
+}
+
+.player__expand-btn {
+  padding: var(--spacing-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 24px;
+  transition: all var(--transition-fast);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+.player__expand-btn:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* === VISUALIZER OVERLAY (COVERS CONTENT AREA ONLY) === */
+.visualizer-overlay {
+  position: fixed;
+  bottom: 106px; /* Just above player (90px + 16px gap) */
+  left: 248px; /* Sidebar width (240px) + gap (8px) */
+  right: 8px; /* Gap from right edge */
+  top: 8px; /* Gap from top */
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: stretch;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.visualizer-overlay.closing {
+  animation: fadeOut 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* === PLAYER CONTROLS (PREV / PLAY / NEXT) === */
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.player-controls button {
+  font-size: 22px;
+  background: transparent;
+  padding: var(--spacing-sm);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.player-controls button:hover {
+  background-color: var(--bg-hover);
+  transform: scale(1.1);
+}
+/* === MUSIC PROGRESS TRACKER === */
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  margin-top: var(--spacing-sm);
+}
+
+.player-progress .time {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: center;
+}
+
+.player-progress input[type="range"] {
+  flex: 1;
+  appearance: none;
+  height: 4px;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.player-progress input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+/* === SHUFFLE / LOOP === */
+.player-modes {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: var(--spacing-lg);
+}
+
+.player-modes button {
+  font-size: 18px;
+  background: transparent;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+}
+
+.player-modes button.active {
+  color: var(--accent-primary);
+}
+
+/* Track info at top center */
+.visualizer-overlay__info {
+  text-align: center;
+  width: 100%;
+  padding-bottom: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+.visualizer-overlay__title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.visualizer-overlay__artist {
+  font-size: 24px;
+  color: var(--text-secondary);
+}
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.volume-control input[type="range"] {
+  width: 90px;
+  height: 4px;
+  appearance: none;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+/* Visualizer canvas container - grows to fill remaining space */
+.visualizer-overlay__canvas-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+}
+
+
+
+/* Large visualizer canvas - starts from bottom */
+.visualizer-overlay__canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  border-radius: var(--radius-lg);
+}
+
+/* === PLAYLIST PICKER MODAL === */
+.playlist-picker {
+  position: fixed;      
+  bottom: 110px;           
+  left: 260px;              
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  min-width: 300px;
+  max-width: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;           
+}
+
+
+.playlist-picker h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+/* Create Playlist Input Group */
+.playlist-picker > div {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.playlist-picker input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-tertiary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.playlist-picker input:focus {
+  border-color: var(--accent-primary);
+  background-color: var(--bg-hover);
+}
+
+.playlist-picker input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Playlist Picker Buttons */
+.playlist-picker button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-hover);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+  margin-bottom: var(--spacing-xs);
+  transition: all var(--transition-fast);
+}
+
+.playlist-picker button:hover {
+  background-color: var(--bg-active);
+}
+
+/* Cancel Button */
+.playlist-picker button:last-child {
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  text-align: center;
+  margin-top: var(--spacing-md);
+  margin-bottom: 0;
+}
+
+.playlist-picker button:last-child:hover {
+  border-color: var(--text-primary);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .visualizer-overlay {
+    left: 8px; /* No sidebar on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .player {
+    flex-direction: column;
+    height: auto;
+    gap: var(--spacing-sm);
+  }
+
+  .player__left {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .player__center {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .player__right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .visualizer-overlay {
+    bottom: 130px; /* Adjusted for taller mobile player */
+  }
+
+  .visualizer-overlay__title {
+    font-size: 32px;
+  }
+
+  .visualizer-overlay__artist {
+    font-size: 18px;
+  }
+
+  .visualizer-overlay__canvas {
+    max-height: 300px !important;
+  }
+}

@@ -1,0 +1,64 @@
+
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr auto;
+  height: 100vh;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--bg-primary);
+}
+
+/* === MAIN CONTENT AREA === */
+.content {
+  grid-column: 2;
+  grid-row: 1 / 2;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+}
+
+/* Content Typography */
+.content h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -1px;
+}
+
+.content h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.5px;
+}
+
+.content h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.content p {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-size: 15px;
+}
+
+/* Empty & Loading States */
+.content > p:only-child,
+.content > h2:last-child {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: var(--spacing-2xl);
+  font-size: 16px;
+}
+
+.content h2:only-child {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-2xl);
+}

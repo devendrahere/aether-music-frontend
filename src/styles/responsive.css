@@ -1,0 +1,115 @@
+
+@media (max-width: 1024px) {
+  /* Hide sidebar on tablets */
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  
+  .sidebar {
+    display: none;
+  }
+  
+  .content {
+    grid-column: 1;
+  }
+  
+  .player {
+    grid-column: 1;
+  }
+}
+
+/* === MOBILE (768px) === */
+@media (max-width: 768px) {
+  /* Reduce content padding */
+  .content {
+    padding: var(--spacing-lg);
+  }
+  
+  /* Smaller typography */
+  .content h1 {
+    font-size: 32px;
+  }
+  
+  .content h2 {
+    font-size: 24px;
+  }
+  
+  .content h3 {
+    font-size: 20px;
+  }
+  
+  /* Stack player vertically */
+  .player {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+  
+  .player > div:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .player audio {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Full width playlist picker on mobile */
+  .playlist-picker {
+    right: var(--spacing-sm);
+    left: var(--spacing-sm);
+    max-width: none;
+  }
+  
+  /* Smaller form padding */
+  form {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md);
+  }
+  
+  /* Compact track rows */
+  .track-row {
+    padding: var(--spacing-sm);
+    font-size: 14px;
+  }
+  
+  /* Always show delete buttons on mobile (no hover) */
+  .track-row button {
+    opacity: 1;
+  }
+}
+
+/* === SMALL MOBILE (480px) === */
+@media (max-width: 480px) {
+  .app {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+  
+  .content {
+    padding: var(--spacing-md);
+  }
+  
+  .content h1 {
+    font-size: 24px;
+  }
+  
+  .content h2 {
+    font-size: 20px;
+  }
+  
+  .sidebar h2 {
+    font-size: 20px;
+  }
+  
+  .player {
+    padding: var(--spacing-sm);
+  }
+  
+  form {
+    padding: var(--spacing-md);
+  }
+}

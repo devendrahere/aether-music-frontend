@@ -27,9 +27,10 @@ import {
   ChevronDown,
   ListPlus
 } from "lucide-react";
-
+import { useLocation } from "react-router-dom";
 
 export default function Player() {
+  const location = useLocation();
   const {
     audioRef,
     currentTrack,
@@ -77,6 +78,9 @@ export default function Player() {
       audioRef.current.volume = volume;
     }
   }, [volume, audioRef]);
+  useEffect(() => {
+    setShowVisualizer(false);
+  }, [location.pathname]);
 
   // Like state sync
   useEffect(() => {

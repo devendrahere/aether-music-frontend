@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import RequireAuth from "./auth/RequireAuth";
 
@@ -13,29 +13,25 @@ import PlaylistDetail from "./pages/PlaylistDetail";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Auth */}
-        <Route path="/login" element={<Auth />} />  
-        <Route path="/auth" element={<Auth />} />    
+    <Routes>
+      {/* Auth */}
+      <Route path="/login" element={<Auth />} />
+      <Route path="/auth" element={<Auth />} />
 
-        {/* Layout */}
-        <Route element={<Layout />}>
-          {/* Public */}
-          <Route path="/" element={<Home />} />
-          <Route path="/tracks" element={<Tracks />} />
-          <Route path="/albums" element={<Albums />} />
-          <Route path="/albums/:id" element={<AlbumDetail />} />
+      {/* Layout */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/tracks" element={<Tracks />} />
+        <Route path="/albums" element={<Albums />} />
+        <Route path="/albums/:id" element={<AlbumDetail />} />
 
-          {/* Protected */}
-          <Route element={<RequireAuth />}>
-            <Route path="/playlists" element={<Playlists />} />
-            <Route path="/playlists/:id" element={<PlaylistDetail />} />
-            <Route path="/liked" element={<LikedSongs />} />
-          </Route>
+        <Route element={<RequireAuth />}>
+          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
+          <Route path="/liked" element={<LikedSongs />} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+      </Route>
+    </Routes>
   );
 }
 

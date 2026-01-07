@@ -8,7 +8,26 @@ import {
   addTrackToPlaylist,
   createPlaylist
 } from "../../api/playlist.api";
-import { recordPlayEvent } from "../../api/playEvent.api";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Heart,
+  HeartOff,
+  Shuffle,
+  Repeat,
+  Repeat1,
+  Volume,
+  Volume1,
+  Volume2,
+  VolumeX,
+  Plus,
+  ChevronUp,
+  ChevronDown,
+  ListPlus
+} from "lucide-react";
+
 
 export default function Player() {
   const {
@@ -25,6 +44,7 @@ export default function Player() {
 
   const { user } = useAuth();
 
+  // State management
   const [liked, setLiked] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const [showPicker, setShowPicker] = useState(false);
@@ -34,8 +54,7 @@ export default function Player() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
 
-
-  /* ---------------- AUDIO TIME ---------------- */
+  // Audio event listeners
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -50,13 +69,16 @@ export default function Player() {
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
     };
-  }, [currentTrack?.id]);
+  }, [currentTrack?.id, audioRef]);
+
+  // Volume control
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
-  }, [volume]);
-  /* ---------------- LIKE STATE ---------------- */
+  }, [volume, audioRef]);
+
+  // Like state sync
   useEffect(() => {
     if (!currentTrack || !user) {
       setLiked(false);
@@ -65,26 +87,12 @@ export default function Player() {
     isTrackLiked(currentTrack.id).then(setLiked);
   }, [currentTrack?.id, user]);
 
-  /* ---------------- PLAY EVENT ---------------- */
-  useEffect(() => {
-    if (currentTrack && user) {
-      recordPlayEvent(currentTrack.id).catch(() => { });
-    }
-  }, [currentTrack?.id]);
-
-  if (!currentTrack) {
-    return <footer className="player">No track selected</footer>;
-  }
-  
-
-  /* ---------------- ACTIONS ---------------- */
+  // Action handlers
   const toggleLike = async () => {
     if (!user) return alert("Login to like songs");
 
     try {
-      liked
-        ? await unlikeTrack(currentTrack.id)
-        : await likeTrack(currentTrack.id);
+      liked ? await unlikeTrack(currentTrack.id) : await likeTrack(currentTrack.id);
       setLiked(!liked);
     } catch {
       alert("Failed to update like");
@@ -107,22 +115,18 @@ export default function Player() {
     }
   };
 
-  // FINAL FIX — DEFENSIVE & CORRECT
   const handleCreateAndAdd = async () => {
     if (!newPlaylistName.trim()) return;
 
     try {
       const res = await createPlaylist({ name: newPlaylistName });
-
-      const playlistId =
-        res?.id || res?.data?.id || res?.playlistId;
+      const playlistId = res?.id || res?.data?.id || res?.playlistId;
 
       if (!playlistId) {
         throw new Error("Playlist ID missing from createPlaylist response");
       }
 
       await addTrackToPlaylist(playlistId, currentTrack.id);
-
       setNewPlaylistName("");
       setShowPicker(false);
     } catch (err) {
@@ -131,100 +135,131 @@ export default function Player() {
     }
   };
 
-  /* ---------------- UI ---------------- */
+  const togglePlayPause = () => {
+    const audio = audioRef.current;
+    audio?.paused ? audio.play() : audio.pause();
+  };
+
+  const handleSeek = (e) => {
+    const newTime = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const toggleLoop = () => {
+    setLoop((l) => (l === "off" ? "all" : l === "all" ? "one" : "off"));
+  };
+
+  const handleVolumeChange = (e) => {
+    setVolume(e.target.value / 100);
+  };
+
+  // Utility functions
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const getVolumeIcon = () => {
+    if (volume === 0) return "🔇";
+    if (volume < 0.5) return "🔉";
+    return "🔊";
+  };
+
+  const getLoopDisplay = () => {
+    if (loop === "off") return "🔁";
+    if (loop === "all") return "🔁 All";
+    return "🔂 One";
+  };
+
+  // Early return if no track
+  if (!currentTrack) {
+    return <footer className="player">No track selected</footer>;
+  }
+
   return (
     <>
       <footer className="player">
-        {/* LEFT */}
+        {/* LEFT SECTION */}
         <div className="player__left">
           <div className="player__track-info">
-            <strong>{currentTrack.title}</strong> — {currentTrack.artist}
+            <div className="player__track-text">
+              <strong className="player__track-title">{currentTrack.title}</strong>
+              <span className="player__track-artist">{currentTrack.artist}</span>
+            </div>
           </div>
 
-          <button className="player__like-btn" onClick={toggleLike}>
-            {liked ? "💔" : "❤️"}
+          <button className="icon-btn like-btn" onClick={toggleLike}>
+            {liked ? <Heart fill="currentColor" /> : <Heart />}
           </button>
 
-          <button
-            className="player__playlist-btn"
-            onClick={() => {
-              openPlaylistPicker();
-            }}
-          >
-            ➕ Playlist
+          <button className="player__playlist-btn" onClick={openPlaylistPicker}>
+            <ListPlus size={18} />
           </button>
 
         </div>
 
-        {/* CENTER */}
+        {/* CENTER SECTION */}
         <div className="player__center">
           <audio ref={audioRef} crossOrigin="anonymous" />
 
+          {/* Playback Controls */}
           <div className="player-controls">
-            <button onClick={previous}>⏮</button>
-
-            <button
-              onClick={() => {
-                const audio = audioRef.current;
-                audio?.paused ? audio.play() : audio.pause();
-              }}
-            >
-              {isPlaying ? "⏸" : "▶"}
+            <button className="icon-btn" onClick={previous}>
+              <SkipBack />
+            </button>
+            <button onClick={togglePlayPause} className="icon-btn">
+              {isPlaying ? <Pause /> : <Play />}
             </button>
 
-            <button onClick={next}>⏭</button>
+            <button className="icon-btn" onClick={next}>
+              <SkipForward />
+            </button>
           </div>
 
+          {/* Progress Bar */}
           <div className="player-progress">
-            <span>
-              {Math.floor(currentTime / 60)}:
-              {Math.floor(currentTime % 60).toString().padStart(2, "0")}
-            </span>
-
+            <span>{formatTime(currentTime)}</span>
             <input
               type="range"
               min={0}
               max={duration || 0}
               value={currentTime}
-              onChange={(e) => {
-                audioRef.current.currentTime = e.target.value;
-                setCurrentTime(e.target.value);
+              onChange={handleSeek}
+              style={{
+                "--progress": `${(currentTime / (duration || 1)) * 100}%`
               }}
             />
 
-            <span>
-              {Math.floor(duration / 60)}:
-              {Math.floor(duration % 60).toString().padStart(2, "0")}
-            </span>
+            <span>{formatTime(duration)}</span>
           </div>
 
+          {/* Shuffle/Loop Modes */}
           <div className="player-modes">
             <button
-              className={shuffle ? "active" : ""}
+              className={`icon-btn ${shuffle ? "active" : ""}`}
               onClick={() => setShuffle(s => !s)}
             >
-              🔀
+              <Shuffle />
             </button>
 
-            <button
-              onClick={() =>
-                setLoop(l =>
-                  l === "off" ? "all" : l === "all" ? "one" : "off"
-                )
-              }
-            >
-              {loop === "off" && "🔁"}
-              {loop === "all" && "🔁 All"}
-              {loop === "one" && "🔂 One"}
+            <button className="icon-btn" onClick={toggleLoop}>
+              {loop === "one" ? <Repeat1 /> : <Repeat />}
             </button>
+
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT SECTION */}
         <div className="player__right">
           <div className="volume-control">
             <span className="volume-icon">
-              {volume === 0 ? "🔇" : volume < 0.5 ? "🔉" : "🔊"}
+              {volume === 0 && <VolumeX />}
+              {volume > 0 && volume < 0.5 && <Volume1 />}
+              {volume >= 0.5 && <Volume2 />}
             </span>
 
             <input
@@ -232,17 +267,18 @@ export default function Player() {
               min="0"
               max="100"
               value={Math.round(volume * 100)}
-              onChange={(e) => setVolume(e.target.value / 100)}
+              onChange={handleVolumeChange}
             />
           </div>
 
-          <button onClick={() => setShowVisualizer(v => !v)}>
-            {showVisualizer ? "🔽" : "🔼"}
+          <button className="icon-btn" onClick={() => setShowVisualizer(v => !v)}>
+            {showVisualizer ? <ChevronDown /> : <ChevronUp />}
           </button>
-        </div>
 
+        </div>
       </footer>
 
+      {/* VISUALIZER OVERLAY */}
       {showVisualizer && (
         <div className="visualizer-overlay">
           <h1>{currentTrack.title}</h1>
@@ -251,6 +287,7 @@ export default function Player() {
         </div>
       )}
 
+      {/* PLAYLIST PICKER MODAL */}
       {showPicker && (
         <div className="playlist-picker">
           <h4>Add to playlist</h4>
@@ -261,11 +298,9 @@ export default function Player() {
             onChange={(e) => setNewPlaylistName(e.target.value)}
           />
 
-          <button onClick={handleCreateAndAdd}>
-            Create & Add
-          </button>
+          <button onClick={handleCreateAndAdd}>Create & Add</button>
 
-          {playlists.map(p => (
+          {playlists.map((p) => (
             <button key={p.id} onClick={() => handleAddToPlaylist(p.id)}>
               {p.name}
             </button>

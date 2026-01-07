@@ -65,15 +65,17 @@ export function PlayerProvider({ children }) {
 
     audio.play()
       .then(() => {
-        //  THIS updates "Recently Played"
         recordPlayEvent({
+          sessionId: sessionIdRef.current,
           trackId: currentTrack.id,
-          eventType: "PLAY",
-          sessionId: sessionIdRef.current
+          playlistId: context.type === "playlist" ? context.id : null,
+          albumId: context.type === "album" ? context.id : null,
+          eventType: "PLAY"
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [currentTrack?.id]);
+
 
   const next = () => {
     setCurrentIndex(i => {

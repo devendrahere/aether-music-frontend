@@ -11,8 +11,15 @@
   margin: 0 0 var(--spacing-lg) 0;
 }
 
-/* Featured Playlist Card */
-.featured-playlist {
+/* Hero Context Container */
+.hero-context {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* Hero Card */
+.hero-card {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-tertiary);
@@ -20,51 +27,34 @@
   padding: var(--spacing-lg);
   border: 1px solid var(--border-color);
   transition: all var(--transition-normal);
-  width: 100%;
-  margin-bottom: var(--spacing-xl);
+  min-width: 200px;
+  flex: 1;
 }
 
-.featured-playlist:hover {
+.hero-card:hover {
   background-color: var(--bg-hover);
   border-color: var(--accent-primary);
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
 }
 
-.featured-playlist h3 {
+.hero-type {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: var(--text-secondary);
-  margin: 0 0 var(--spacing-lg) 0; /* Increased spacing below header */
+  margin-bottom: var(--spacing-md);
+  display: block;
 }
 
-.featured-playlist > div {
-  display: flex;
-  align-items: left;
-  justify-content: space-between;
-  background-color: var(--bg-secondary); /* Slightly different bg */
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-sm);
-  gap: var(--spacing-md);
-}
-
-.featured-playlist p {
+.hero-title {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.3px;
   line-height: 1.3;
-  flex: 1;
-}
-
-.featured-playlist span {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-  white-space: nowrap;
 }
 
 /* === HOME SECTIONS === */
@@ -184,12 +174,16 @@
     font-size: 36px;
   }
 
-  .featured-playlist {
-    width: 100%;
+  .hero-context {
+    gap: var(--spacing-sm);
   }
 
-  .featured-playlist p {
-    font-size: 18px;
+  .hero-card {
+    min-width: 180px;
+  }
+
+  .hero-title {
+    font-size: 15px;
   }
 
   .home-section h2 {
@@ -207,12 +201,17 @@
     font-size: 28px;
   }
 
-  .featured-playlist {
-    width: 160px;
+  .hero-context {
+    flex-direction: column;
+  }
+
+  .hero-card {
+    width: 100%;
+    min-width: unset;
     padding: var(--spacing-md);
   }
 
-  .featured-playlist p {
+  .hero-title {
     font-size: 14px;
   }
 
@@ -228,18 +227,10 @@
   .home-section__card {
     padding: var(--spacing-sm);
   }
-
-  .home-section__track {
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
 }
 
 @media (max-width: 480px) {
   .home-section__grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .home-section__track-number {
-    font-size: 14px;
   }
 }

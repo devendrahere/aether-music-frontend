@@ -22,9 +22,10 @@ export default function Home() {
       {/* THIS is where featured playlist comes from */}
       <HomeHero hero={home.hero} />
 
-      {home.sections.map(section => (
-        <HomeSection key={section.type} section={section} />
+      {home.sections.map((section, index) => (
+        <HomeSection key={`${section.type}-${index}`} section={section} />
       ))}
+
     </div>
   );
 }
